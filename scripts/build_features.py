@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-from pandas._libs import interval
 import pandas as pd
-import numpy as np
 import os
 
 
 #  Load the wide dataset
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_RAW = os.path.join(BASE_DIR, "data", "raw")
+DATA_PROCESSED = os.path.join(BASE_DIR, "data", "processed")
+MODEL_DIR = os.path.join(BASE_DIR, "model")
 df = pd.read_csv(os.path.join(DATA_RAW, "health_wide_full.csv"))
 
 # Ensure dates are sorted sequentially
@@ -68,5 +68,8 @@ print(df[preview_columns].head(10))
 
 
 # Save the finalized dataset ready for model training (XGBoost, Random Forest, etc.)
-df.to_csv(r"C:\Users\shour\OneDrive\Desktop\Smart calories tracker\data manipulation\health_modeling_ready.csv", index=False)
-print("\nPipeline execution complete. Dataset saved to 'health_modeling_ready.csv'.")
+os.makedirs(DATA_PROCESSED, exist_ok=True)
+os.makedirs(MODEL_DIR, exist_ok=True)
+df.to_csv(os.path.join(DATA_PROCESSED, "health_features_engineered.csv"), index=False)
+df.to_csv(os.path.join(MODEL_DIR, "health_modeling_ready.csv"), index=False)
+print("\nPipeline execution complete. Dataset saved for processing and model training.")
